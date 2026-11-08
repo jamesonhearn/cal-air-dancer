@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Air Dancer — CS184/284A Final Project Proposal</title>
+<style>
+  :root {
+    --ink: #1c2230; --ink-2: #4a5263; --ink-3: #7b8394;
+    --paper: #fbfaf7; --card: #fff; --rule: #e6e2da;
+    --accent: #e4572e; --accent-soft: #fdeee8;
+    --sky: #2f74b5; --sky-soft: #e9f2fb;
+    --sun: #f2b134; --sun-soft: #fdf5e2;
+    --good: #2e8b57; --good-soft: #e7f4ec;
+    --r: 12px; --maxw: 860px;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 var(--font); -webkit-font-smoothing: antialiased; }
+  a { color: var(--sky); text-decoration: none; border-bottom: 1px solid rgba(47,116,181,.25); }
+  a:hover { border-bottom-color: var(--sky); }
+
+  header { background: radial-gradient(900px 340px at 90% -20%, rgba(242,177,52,.25), transparent 60%), radial-gradient(700px 300px at 0% 0%, rgba(228,87,46,.15), transparent 60%), #fff; border-bottom: 1px solid var(--rule); }
+  .head { max-width: var(--maxw); margin: 0 auto; padding: 44px 24px 30px; display: grid; grid-template-columns: 1fr 120px; gap: 24px; align-items: center; }
+  .eyebrow { font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin: 0 0 8px; }
+  h1 { font-size: clamp(32px, 5vw, 46px); line-height: 1.05; margin: 0 0 6px; letter-spacing: -.02em; }
+  .subtitle { font-size: 20px; color: var(--ink-2); margin: 0; font-weight: 500; }
+  .head svg { width: 120px; height: 160px; }
+
+  main { max-width: var(--maxw); margin: 0 auto; padding: 0 24px 64px; }
+  section { padding-top: 38px; }
+  h2 { font-size: 24px; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--ink); letter-spacing: -.01em; }
+  h3 { font-size: 17px; margin: 24px 0 8px; }
+  p { margin: 0 0 12px; }
+  ul, ol { margin: 0 0 12px; padding-left: 22px; }
+  li { margin: 3px 0; }
+  .muted { color: var(--ink-3); }
+  .small { font-size: 14px; }
+  .tag { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 1px 6px; border-radius: 5px; background: #eef0f4; color: var(--ink-3); vertical-align: 1px; margin-right: 3px; }
+
+  .note { border: 1px dashed var(--sun); background: var(--sun-soft); border-radius: 10px; padding: 12px 16px; font-size: 14px; color: #5d4a17; margin-top: 24px; }
+
+  .summary { font-size: 17.5px; background: var(--card); border: 1px solid var(--rule); border-left: 4px solid var(--accent); border-radius: 10px; padding: 16px 18px; }
+  .team { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px; }
+  .member { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 10px 12px; font-size: 14px; color: var(--ink-3); }
+  .member b { display: block; color: var(--ink); }
+
+  figure { margin: 18px 0; background: var(--card); border: 1px solid var(--rule); border-radius: var(--r); padding: 16px; }
+  figure svg { width: 100%; height: auto; display: block; }
+  figcaption { font-size: 13.5px; color: var(--ink-3); margin-top: 8px; }
+  figcaption b { color: var(--ink-2); }
+
+  .callout { background: var(--accent-soft); border: 1px solid #f4c7b8; border-radius: 10px; padding: 12px 16px; margin: 14px 0; }
+  .callout b { color: #9c3416; }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: var(--r); background: var(--card); margin: 12px 0 16px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 13px; border-bottom: 1px solid var(--rule); }
+  thead th { background: #f4f2ed; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-2); }
+  tbody tr:last-child td { border-bottom: 0; }
+  td:first-child { font-weight: 600; }
+
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .box { background: var(--card); border: 1px solid var(--rule); border-radius: var(--r); padding: 14px 16px; }
+  .box h3 { margin: 0 0 8px; display: flex; align-items: center; gap: 8px; font-size: 16px; }
+  .box ul { list-style: none; padding: 0; margin: 0; }
+  .box li { position: relative; padding: 6px 0 6px 22px; border-bottom: 1px dashed var(--rule); font-size: 14.5px; color: var(--ink-2); }
+  .box li:last-child { border-bottom: 0; }
+  .box li b { color: var(--ink); }
+  .plan li::before { content: "✓"; position: absolute; left: 0; color: var(--good); font-weight: 700; }
+  .hope li::before { content: "☆"; position: absolute; left: 0; color: var(--sun); font-weight: 700; }
+  .plan { border-top: 4px solid var(--good); }
+  .hope { border-top: 4px solid var(--sun); }
+
+  .questions { counter-reset: q; list-style: none; padding: 0; }
+  .questions li { counter-increment: q; position: relative; padding: 8px 12px 8px 46px; margin: 0 0 8px; background: var(--card); border: 1px solid var(--rule); border-radius: 10px; font-size: 15px; }
+  .questions li::before { content: "Q" counter(q); position: absolute; left: 12px; top: 8px; font-family: var(--mono); font-weight: 700; color: var(--sky); font-size: 14px; }
+
+  .weeks { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; }
+  .week { background: var(--card); border: 1px solid var(--rule); border-radius: var(--r); padding: 14px 16px; }
+  .week header { all: unset; display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .week h3 { margin: 0; font-size: 16px; }
+  .week .dates { font-size: 13px; color: var(--ink-3); font-family: var(--mono); }
+  .week ul { padding-left: 18px; font-size: 14.5px; color: var(--ink-2); margin: 0; }
+  .week li b { color: var(--ink); }
+  .due { display: inline-block; margin-top: 8px; font-size: 12.5px; font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; padding: 2px 8px; }
+  .due.soft { background: #7b8394; }
+
+  .refs { font-size: 14px; color: var(--ink-2); }
+  .refs li { margin: 6px 0; }
+
+  footer { border-top: 1px solid var(--rule); padding: 20px 24px 36px; text-align: center; font-size: 13px; color: var(--ink-3); }
+
+  @media (max-width: 720px) {
+    .head { grid-template-columns: 1fr; } .head svg { display: none; }
+    .cols, .weeks { grid-template-columns: 1fr; }
+    .team { grid-template-columns: 1fr 1fr; }
+  }
+  @media print {
+    body { background: #fff; font-size: 10.5pt; }
+    .note { display: none; }
+    header { background: none; }
+    .head { padding: 8px 0; }
+    main { padding: 0; max-width: none; }
+    section { padding-top: 14px; }
+    figure, .box, .week, .table-wrap, .questions li { break-inside: avoid; }
+    a { color: inherit; border: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head">
+    <div>
+      <p class="eyebrow">CS 184/284A · Fall 2026 · Final Project Proposal</p>
+      <h1>Air Dancer</h1>
+      <p class="subtitle">Simulating an inflatable tube man with airflow-driven cloth</p>
+    </div>
+    <svg viewBox="0 0 120 160" aria-hidden="true">
+      <rect x="40" y="138" width="40" height="18" rx="4" fill="#2b3245"/>
+      <path d="M59 138 C49 112, 46 92, 54 74 C60 60, 72 56, 76 40 C80 28, 74 18, 66 14" fill="none" stroke="#e4572e" stroke-width="18" stroke-linecap="round"/>
+      <path d="M45 70 C42 52, 30 76, 18 66" fill="none" stroke="#f2b134" stroke-width="7" stroke-linecap="round"/>
+      <path d="M64 70 C78 74, 90 66, 100 54" fill="none" stroke="#f2b134" stroke-width="7" stroke-linecap="round"/>
+      <circle cx="63" cy="17" r="2.2" fill="#1c2230"/><circle cx="70" cy="20" r="2.2" fill="#1c2230"/>
+    </svg>
+  </div>
+</header>
+
+<main>
+
+
+  <!-- ============ TITLE, SUMMARY, TEAM ============ -->
+  <section id="summary">
+    <h2>Summary and Team</h2>
+    <p class="summary">We will extend the HW4 cloth simulator into a fabric tube with a wrap-around seam, pinned base, and open top, supplied by a fan, to simulate an inflatable tube man. The flow resistance inside the tube will depend on the cloth's shape, so a kink can restrict airflow, change pressure support, and potentially produce collapse and recovery. We will test whether this airflow–cloth coupling is enough to produce the familiar "dance" under a steady fan setting.</p>
+    <div class="team">
+      <div class="member"><b>Jameson Hearn</b>3041729330</div>
+      <div class="member"><b>Arian Namazi</b>3043239709</div>
+      <div class="member"><b>Gregoire Marie Emile Georges Serres</b>3043246573</div>
+      <div class="member"><b>Weishu Zhang</b>3041752847</div>
+    </div>
+  </section>
+
+  <!-- ============ PROBLEM DESCRIPTION ============ -->
+  <section id="problem">
+    <h2>Problem Description</h2>
+    <p><b>Context.</b> An air dancer is a fabric tube on a fan that can collapse and spring back up without a programmed motion controller. A plausible explanation is a feedback loop between the tube's shape and the air inside it (Figure 1). Lab experiments on soft tubes under constant airflow demonstrate kink-driven self-oscillation [4].</p>
+
+    <figure>
+      <svg viewBox="0 0 820 190" role="img" aria-label="Hypothesized loop: tube kinks, flow is restricted, top loses support while pressure builds below, and the tube may reopen.">
+        <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#7b8394"/></marker></defs>
+        <g font-size="13.5" fill="#1c2230" text-anchor="middle">
+          <rect x="10" y="30" width="180" height="70" rx="10" fill="#fdeee8" stroke="#e4572e" stroke-width="2"/>
+          <text x="100" y="60" font-weight="700">Tube kinks;</text><text x="100" y="79" font-weight="700">cross-section narrows</text>
+          <rect x="220" y="30" width="180" height="70" rx="10" fill="#fff" stroke="#7b8394"/>
+          <text x="310" y="60" font-weight="700">Resistance rises;</text><text x="310" y="79" font-weight="700">flow is restricted</text>
+          <rect x="430" y="30" width="180" height="70" rx="10" fill="#fff" stroke="#7b8394"/>
+          <text x="520" y="60" font-weight="700">Top deflates;</text><text x="520" y="79" font-weight="700">pressure builds below</text>
+          <rect x="640" y="30" width="170" height="70" rx="10" fill="#fff" stroke="#7b8394"/>
+          <text x="725" y="60" font-weight="700">Kink straightens;</text><text x="725" y="79" font-weight="700">tube springs up</text>
+        </g>
+        <g stroke="#7b8394" stroke-width="1.5" fill="none">
+          <path d="M192 65 H216" marker-end="url(#a)"/><path d="M402 65 H426" marker-end="url(#a)"/><path d="M612 65 H636" marker-end="url(#a)"/>
+          <path d="M725 102 V140 H100 V104" marker-end="url(#a)" stroke="#e4572e" stroke-dasharray="5 4"/>
+        </g>
+        <text x="412" y="164" text-anchor="middle" font-size="12.5" fill="#e4572e" font-weight="600">repeats under a steady fan (the hypothesis we test)</text>
+      </svg>
+      <figcaption><b>Figure 1.</b> The hypothesized mechanism we will test.</figcaption>
+    </figure>
+
+    <p><b>Why it matters.</b> Simple cloth inflation models use a single pressure for the whole object [5], and wind models push on the outside. Neither captures air flowing <em>through</em> a deformable tube, which also matters for windsocks, hoses, and inflatables. A Spring 2022 CS184 team attempted a tube man and switched to a windsock instead [6].</p>
+
+    <p><b>Why it's challenging.</b> HW4 only builds flat sheets, so we need a wrap-around seam while keeping the top open. Air pressure must respond to flow and the cloth's changing volume, and the fan can't supply unlimited pressure. Collapse involves tight folds where fabric can pass through itself [3], and stiff pressure forces can make the simulation unstable.</p>
+
+    <p><b>General approach.</b> We split the tube into a chain of air sections. Each step, we estimate the passage cross-section between sections and use it to set how easily air flows through. Each section will track air mass and changing volume using a simple pressure–volume approximation. Flow between sections will conserve air mass, with a bounded fan pressure–flow relationship at the base and an open outlet to ambient air. Pressure differences across the fabric will act alongside gravity, inertia, and cloth forces, allowing us to test whether pressurization supports reopening after a fold.</p>
+    <p>We will compare this with one uniform internal pressure computed from total air mass and tube volume, and with section pressures whose flow resistance is fixed at its undeformed value. Both controls will retain the same fan and outlet models. These comparisons test which ingredients matter within our implementation and the settings we explore, not which ingredients all real air dancers require.</p>
+  </section>
+
+  <!-- ============ GOALS AND DELIVERABLES ============ -->
+  <section id="goals">
+    <h2>Goals and Deliverables</h2>
+    <p>Our goal is a cloth tube that collapses and re-inflates repeatedly under a steady fan setting, and evidence of how shape-dependent airflow affects that motion. If the tube doesn't dance, a well-measured negative result will establish the limitations of this implementation under the tested settings.</p>
+
+    <h3>What we will create</h3>
+    <ul>
+      <li><b>Interactive demo:</b> the simulator running live, with sliders for fan setting and fabric stiffness, and a toggle between our model and the simpler ones so viewers can compare how the motion changes.</li>
+      <li><b>Images and video:</b> side-by-side clips of each model under matched settings. If sustained cycles occur, we will include a filmstrip of one collapse-and-recover cycle (Figure 2).</li>
+    </ul>
+
+    <figure>
+      <svg viewBox="0 0 820 190" role="img" aria-label="Desired cycle: upright, kinking, top collapsed, re-inflating, upright. Illustration, not simulation output or a promised result.">
+        <g fill="none" stroke-linecap="round">
+          <!-- frame boxes -->
+          <g stroke="#e6e2da"><rect x="10" y="10" width="150" height="150" rx="8"/><rect x="172" y="10" width="150" height="150" rx="8"/><rect x="334" y="10" width="150" height="150" rx="8"/><rect x="496" y="10" width="150" height="150" rx="8"/><rect x="658" y="10" width="150" height="150" rx="8"/></g>
+          <g fill="#2b3245" stroke="none"><rect x="70" y="140" width="30" height="12" rx="3"/><rect x="232" y="140" width="30" height="12" rx="3"/><rect x="394" y="140" width="30" height="12" rx="3"/><rect x="556" y="140" width="30" height="12" rx="3"/><rect x="718" y="140" width="30" height="12" rx="3"/></g>
+          <g stroke="#e4572e" stroke-width="12">
+            <path d="M85 140 C84 100, 86 60, 88 26"/>
+            <path d="M247 140 C246 110, 248 90, 252 72 C276 56, 290 52, 298 40"/>
+            <path d="M409 140 C408 115, 410 98, 420 88 C440 80, 452 96, 460 120"/>
+            <path d="M571 140 C570 112, 572 86, 580 66 C586 52, 596 46, 604 44"/>
+            <path d="M733 140 C734 100, 732 60, 730 26"/>
+          </g>
+        </g>
+        <g font-size="12.5" fill="#4a5263" text-anchor="middle">
+          <text x="85" y="180">1 · upright</text><text x="247" y="180">2 · kink forms</text><text x="409" y="180">3 · top collapses</text><text x="571" y="180">4 · re-inflating</text><text x="733" y="180">5 · upright again</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Illustration of the desired cycle, not simulation output. We will produce a cycle filmstrip if sustained motion occurs.</figcaption>
+    </figure>
+
+    <h3>Questions we plan to answer</h3>
+    <ol class="questions">
+      <li>Can shape-dependent airflow coupled to cloth dynamics produce repeated collapse and recovery under a steady fan setting?</li>
+      <li>How does the motion change with simpler models (uniform pressure, or resistance fixed at its undeformed value)?</li>
+      <li>How does the motion change with fan setting and fabric stiffness?</li>
+    </ol>
+
+    <h3>How we will measure it</h3>
+    <ul>
+      <li><b>Sustained motion:</b> number of collapse cycles and whether their size holds steady or dies out after startup. We will choose an observation duration and classification criteria before the main comparisons.</li>
+      <li><b>Mechanism:</b> pressure, flow, and passage area over time alongside motion, to check whether restriction, loss of support, and recovery occur in the hypothesized sequence.</li>
+      <li><b>Behavior map:</b> a grid of fan setting × stiffness runs, labeled steady, dying out, repeating, or irregular, with invalid or numerically unstable runs flagged separately.</li>
+      <li><b>Reliability:</b> sensitivity to a smaller time step and separate refinement of the cloth mesh and air-section resolution while preserving physical parameters.</li>
+      <li><b>Performance:</b> frame rate and simulated time per wall-clock second vs. mesh resolution; we're aiming for real-time advancement at around 30 fps at a modest resolution, not claiming an achieved benchmark.</li>
+    </ul>
+
+    <p><b>Why we think we can do it.</b> The cloth, integration, and collision code come from HW4. The new pieces (a tube mesh, a small air model, and pressure forces) can each be tested on their own, and the air model can be checked on a rigid tube before it touches cloth. Stable coupling and sustained oscillation remain core risks.</p>
+    <p><b>Fair comparisons.</b> We will use the same cloth parameters, fan relationship, outlet, initial conditions, and numerical settings across models. Only the pressure-distribution or resistance assumption will change.</p>
+
+    <div class="cols">
+      <div class="box plan">
+        <h3>1 · Plan to deliver</h3>
+        <ul>
+          <li>Tube mesh built on HW4 with a wrap-around seam, pinned base, and open top, tested for stable inflation under a fan.</li>
+          <li>Air model with pressure varying along the tube and shape-dependent flow.</li>
+          <li>The two simpler comparison models, switchable in the GUI.</li>
+          <li>Measurements of sustained motion, a behavior map, and reliability checks.</li>
+          <li>Interactive demo, comparison video, and final paper.</li>
+        </ul>
+      </div>
+      <div class="box hope">
+        <h3>2 · Hope to deliver</h3>
+        <ul>
+          <li>Arms branching off the main tube.</li>
+          <li>Fabric shading (sheen, light through the fabric).</li>
+          <li>Qualitative comparison with real air-dancer footage and mechanism comparison with published lab data [7], accounting for different materials and boundary conditions.</li>
+          <li>Varying the fan over time so the dancer moves to music.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SCHEDULE ============ -->
+  <section id="schedule">
+    <h2>Schedule</h2>
+    <div class="weeks">
+      <div class="week">
+        <header><h3>Week 1</h3><span class="dates">Nov 10 – Nov 16</span></header>
+        <ul>
+          <li>Finish HW4 core as our base.</li>
+          <li>Build the tube mesh with a wrap-around seam, pinned base, and open top.</li>
+          <li>Write and test the air model on a rigid tube.</li>
+        </ul>
+        <span class="due soft">Proposal due Nov 10</span>
+      </div>
+      <div class="week">
+        <header><h3>Week 2</h3><span class="dates">Nov 17 – Nov 22</span></header>
+        <ul>
+          <li>Connect air pressure to the cloth; get a stable inflated tube.</li>
+          <li>Add shape-dependent flow; aim for a first collapse.</li>
+          <li>Milestone page, video, and slides.</li>
+        </ul>
+        <span class="due">Milestone due Nov 22</span>
+      </div>
+      <div class="week">
+        <header><h3>Week 3</h3><span class="dates">Nov 23 – Nov 29</span></header>
+        <ul>
+          <li>Tune for repeated cycles; improve self-collision in folds.</li>
+          <li>Add the two comparison models.</li>
+          <li>Set up batch runs for measurements.</li>
+        </ul>
+        <span class="due soft">HW4 due Nov 27</span>
+      </div>
+      <div class="week">
+        <header><h3>Week 4</h3><span class="dates">Nov 30 – Dec 6</span></header>
+        <ul>
+          <li>Run comparisons, behavior map, and reliability checks.</li>
+          <li>Polish the demo; record final clips.</li>
+          <li>Write the paper; make the final video and webpage.</li>
+        </ul>
+        <span class="due">Final report + video due Dec 6</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RESOURCES ============ -->
+  <section id="resources">
+    <h2>Resources</h2>
+    <p><b>Starting code.</b> The CS184 HW4 cloth simulator [2] (C++, OpenGL), with our implementation being completed as the starting point: mass-spring cloth, Verlet integration, collisions, and shaders.</p>
+    <p><b>Platform.</b> Our laptops/PCs, simulating on the CPU. <b>Software:</b> Git/GitHub, Overleaf (ACM SIGGRAPH template), Python for plots.</p>
+    <p><b>References.</b></p>
+    <ol class="refs">
+      <li><a href="https://cs184.eecs.berkeley.edu/fa26/project/">CS 184/284A Final project requirements</a>.</li>
+      <li><a href="https://cs184.eecs.berkeley.edu/fa26/hw/hw4/">CS 184/284A HW4: Cloth Simulation</a>.</li>
+      <li>Bridson, R., Fedkiw, R. &amp; Anderson, J. 2002. <a href="https://graphics.stanford.edu/papers/cloth-sig02/">Robust Treatment of Collisions, Contact and Friction for Cloth Animation</a>. <em>ACM TOG</em> 21(3).</li>
+      <li>Comoretto, A., Schomaker, H. A. H. &amp; Overvelde, J. T. B. 2025. <a href="https://arxiv.org/abs/2409.07011v2">Physical synchronization of soft self-oscillating limbs for fast and autonomous locomotion</a>. <em>Science</em> 388, 610–615.</li>
+      <li>Matyka, M. &amp; Ollila, M. 2003. <a href="https://arxiv.org/abs/physics/0407003">A Pressure Model for Soft Body Simulation</a>. SIGRAD.</li>
+      <li><a href="https://somaniarushi.github.io/184-final/website">CS184 Spring 2022 final project (tube man attempt → windsock)</a>.</li>
+      <li>Comoretto et al. 2025. <a href="https://zenodo.org/records/14055942">Replication package (data and code)</a>. Zenodo.</li>
+    </ol>
+  </section>
+</main>
+
+<footer>Air Dancer · CS 184/284A Fall 2026 · Jameson Hearn · Arian Namazi · Gregoire Marie Emile Georges Serres · Weishu Zhang </footer>
+</body>
+</html>
