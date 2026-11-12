@@ -68,10 +68,10 @@
   .box li { position: relative; padding: 6px 0 6px 22px; border-bottom: 1px dashed var(--rule); font-size: 14.5px; color: var(--ink-2); }
   .box li:last-child { border-bottom: 0; }
   .box li b { color: var(--ink); }
-  .plan li::before { content: "✓"; position: absolute; left: 0; color: var(--good); font-weight: 700; }
-  .hope li::before { content: "☆"; position: absolute; left: 0; color: var(--sun); font-weight: 700; }
+  .plan li::before { content: "-"; position: absolute; left: 0; color: var(--good); font-weight: 700; }
+  .hope li::before { content: "-"; position: absolute; left: 0; color: var(--sun); font-weight: 700; }
   .plan { border-top: 4px solid var(--good); }
-  .hope { border-top: 4px solid var(--sun); }
+  .hope { border-top: 4px solid var(--accent); }
 
   .questions { counter-reset: q; list-style: none; padding: 0; }
   .questions li { counter-increment: q; position: relative; padding: 8px 12px 8px 46px; margin: 0 0 8px; background: var(--card); border: 1px solid var(--rule); border-radius: 10px; font-size: 15px; }
@@ -146,7 +146,7 @@
   <!-- ============ PROBLEM DESCRIPTION ============ -->
   <section id="problem">
     <h2>Problem Description</h2>
-    <p><b>Context.</b> An air dancer is a fabric tube on a fan that can collapse and spring back up without a programmed motion controller. A plausible explanation is a feedback loop between the tube's shape and the air inside it (Figure 1). Lab experiments on soft tubes under constant airflow demonstrate kink-driven self-oscillation [4].</p>
+    <p><b>Context.</b> An air dancer is a fabric tube on a fan that can collapse and spring back up without a programmed motion controller. A plausible explanation is a feedback loop between the tube's shape and the air inside it (Figure 1). Lab experiments on soft tubes under constant airflow demonstrate kink-driven self-oscillation [4]. These experiments however use different materials, geometries, and mounting conditions, so they primarily inform our proposed feedback mechanism where we intend to reproduce similar results.</p>
 
     <figure>
       <svg viewBox="0 0 820 190" role="img" aria-label="Hypothesized loop: tube kinks, flow is restricted, top loses support while pressure builds below, and the tube may reopen.">
@@ -263,7 +263,7 @@
           <li>Build the tube mesh with a wrap-around seam, pinned base, and open top.</li>
           <li>Write and test the air model on a rigid tube.</li>
         </ul>
-        <span class="due soft">Proposal due Nov 10</span>
+        <span class="due soft">Proposal due Nov 12</span>
       </div>
       <div class="week">
         <header><h3>Week 2</h3><span class="dates">Nov 17 – Nov 22</span></header>
