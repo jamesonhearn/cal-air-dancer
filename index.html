@@ -6,12 +6,29 @@
 <title>Air Dancer — CS184/284A Final Project Proposal</title>
 <style>
   :root {
-    --ink: #1c2230; --ink-2: #4a5263; --ink-3: #7b8394;
-    --paper: #fbfaf7; --card: #fff; --rule: #e6e2da;
-    --accent: #e4572e; --accent-soft: #fdeee8;
-    --sky: #2f74b5; --sky-soft: #e9f2fb;
-    --sun: #f2b134; --sun-soft: #fdf5e2;
-    --good: #2e8b57; --good-soft: #e7f4ec;
+  --ink: #242d36;
+  --ink-2: #505d68;
+  --ink-3: #687783;
+
+  --paper: #f7f6f4;
+  --card: #ffffff;
+  --rule: #d8e0e5;
+
+  /* Fired orange — primary emphasis */
+  --accent: #bd4817;
+  --accent-soft: #ffede3;
+
+  /* Steel blue — comparisons and supporting information */
+  --sky: #456a83;
+  --sky-soft: #e7f0f5;
+
+  /* Bronze — secondary emphasis */
+  --sun: #896322;
+  --sun-soft: #f5eddf;
+
+  /* Muted plum — replaces green */
+  --good: #79566d;
+  --good-soft: #f2e9ef;
     --r: 12px; --maxw: 860px;
     --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -152,20 +169,20 @@
       <svg viewBox="0 0 820 190" role="img" aria-label="Hypothesized loop: tube kinks, flow is restricted, top loses support while pressure builds below, and the tube may reopen.">
         <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#7b8394"/></marker></defs>
         <g font-size="13.5" fill="#1c2230" text-anchor="middle">
-          <rect x="10" y="30" width="180" height="70" rx="10" fill="#fdeee8" stroke="#e4572e" stroke-width="2"/>
-          <text x="100" y="60" font-weight="700">Tube kinks;</text><text x="100" y="79" font-weight="700">cross-section narrows</text>
+          <rect x="10" y="30" width="180" height="70" rx="10" fill="#fdeee8" stroke="#bd4817" stroke-width="2"/>
+          <text x="100" y="60" font-weight="700">Tube kinks</text><text x="100" y="79" font-weight="700">cross-section narrows</text>
           <rect x="220" y="30" width="180" height="70" rx="10" fill="#fff" stroke="#7b8394"/>
-          <text x="310" y="60" font-weight="700">Resistance rises;</text><text x="310" y="79" font-weight="700">flow is restricted</text>
+          <text x="310" y="60" font-weight="700">Resistance rises</text><text x="310" y="79" font-weight="700">flow is restricted</text>
           <rect x="430" y="30" width="180" height="70" rx="10" fill="#fff" stroke="#7b8394"/>
-          <text x="520" y="60" font-weight="700">Top deflates;</text><text x="520" y="79" font-weight="700">pressure builds below</text>
+          <text x="520" y="60" font-weight="700">Top deflates</text><text x="520" y="79" font-weight="700">pressure builds below</text>
           <rect x="640" y="30" width="170" height="70" rx="10" fill="#fff" stroke="#7b8394"/>
-          <text x="725" y="60" font-weight="700">Kink straightens;</text><text x="725" y="79" font-weight="700">tube springs up</text>
+          <text x="725" y="60" font-weight="700">Kink straightens</text><text x="725" y="79" font-weight="700">tube springs up</text>
         </g>
         <g stroke="#7b8394" stroke-width="1.5" fill="none">
           <path d="M192 65 H216" marker-end="url(#a)"/><path d="M402 65 H426" marker-end="url(#a)"/><path d="M612 65 H636" marker-end="url(#a)"/>
-          <path d="M725 102 V140 H100 V104" marker-end="url(#a)" stroke="#e4572e" stroke-dasharray="5 4"/>
+          <path d="M725 102 V140 H100 V104" marker-end="url(#a)" stroke="#bd4817" stroke-dasharray="5 4"/>
         </g>
-        <text x="412" y="164" text-anchor="middle" font-size="12.5" fill="#e4572e" font-weight="600">repeats under a steady fan (the hypothesis we test)</text>
+        <text x="412" y="164" text-anchor="middle" font-size="12.5" fill="#bd4817" font-weight="600">repeats under a steady fan (the hypothesis we test)</text>
       </svg>
       <figcaption><b>Figure 1.</b> The hypothesized mechanism we will test.</figcaption>
     </figure>
@@ -175,7 +192,7 @@
     <p><b>Why it's challenging.</b> HW4 only builds flat sheets, so we need a wrap-around seam while keeping the top open. Air pressure must respond to flow and the cloth's changing volume, and the fan can't supply unlimited pressure. Collapse involves tight folds where fabric can pass through itself [3], and stiff pressure forces can make the simulation unstable.</p>
 
     <p><b>General approach.</b> We split the tube into a chain of air sections. Each step, we estimate the passage cross-section between sections and use it to set how easily air flows through. Each section will track air mass and changing volume using a simple pressure–volume approximation. Flow between sections will conserve air mass, with a bounded fan pressure–flow relationship at the base and an open outlet to ambient air. Pressure differences across the fabric will act alongside gravity, inertia, and cloth forces, allowing us to test whether pressurization supports reopening after a fold.</p>
-    <p>We will compare this with one uniform internal pressure computed from total air mass and tube volume, and with section pressures whose flow resistance is fixed at its undeformed value. Both controls will retain the same fan and outlet models. These comparisons test which ingredients matter within our implementation and the settings we explore, not which ingredients all real air dancers require.</p>
+    <p>We will compare this with one uniform internal pressure computed from total air mass and tube volume, and with section pressures whose flow resistance is fixed at its undeformed value. Both controls will retain the same fan and outlet models.</p>
   </section>
 
   <!-- ============ GOALS AND DELIVERABLES ============ -->
@@ -207,7 +224,7 @@
           <text x="85" y="180">1 · upright</text><text x="247" y="180">2 · kink forms</text><text x="409" y="180">3 · top collapses</text><text x="571" y="180">4 · re-inflating</text><text x="733" y="180">5 · upright again</text>
         </g>
       </svg>
-      <figcaption><b>Figure 2.</b> Illustration of the desired cycle, not simulation output. We will produce a cycle filmstrip if sustained motion occurs.</figcaption>
+      <figcaption><b>Figure 2.</b> Illustration of the desired cycle.</figcaption>
     </figure>
 
     <h3>Questions we plan to answer</h3>
