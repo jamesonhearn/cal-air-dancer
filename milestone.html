@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Air Dancer · CS 184/284A Milestone</title>
+<style>
+  :root {
+  --ink: #242d36;
+  --ink-2: #505d68;
+  --ink-3: #687783;
+ 
+  --paper: #f7f6f4;
+  --card: #ffffff;
+  --rule: #d8e0e5;
+ 
+  /* Fired orange — primary emphasis */
+  --accent: #bd4817;
+  --accent-soft: #ffede3;
+ 
+  /* Steel blue — comparisons and supporting information */
+  --sky: #456a83;
+  --sky-soft: #e7f0f5;
+ 
+  /* Bronze — secondary emphasis */
+  --sun: #896322;
+  --sun-soft: #f5eddf;
+ 
+  /* Muted plum — replaces green */
+  --good: #79566d;
+  --good-soft: #f2e9ef;
+    --r: 12px; --maxw: 860px;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 var(--font); -webkit-font-smoothing: antialiased; }
+  a { color: var(--sky); text-decoration: none; border-bottom: 1px solid rgba(47,116,181,.25); }
+  a:hover { border-bottom-color: var(--sky); }
+ 
+  header { background: radial-gradient(900px 340px at 90% -20%, rgba(242,177,52,.25), transparent 60%), radial-gradient(700px 300px at 0% 0%, rgba(228,87,46,.15), transparent 60%), #fff; border-bottom: 1px solid var(--rule); }
+  .head { max-width: var(--maxw); margin: 0 auto; padding: 44px 24px 30px; display: grid; grid-template-columns: 1fr 120px; gap: 24px; align-items: center; }
+  .eyebrow { font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin: 0 0 8px; }
+  h1 { font-size: clamp(32px, 5vw, 46px); line-height: 1.05; margin: 0 0 6px; letter-spacing: -.02em; }
+  .subtitle { font-size: 20px; color: var(--ink-2); margin: 0; font-weight: 500; }
+  .head svg { width: 120px; height: 160px; }
+ 
+  main { max-width: var(--maxw); margin: 0 auto; padding: 0 24px 64px; }
+  section { padding-top: 38px; }
+  h2 { font-size: 24px; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--ink); letter-spacing: -.01em; }
+  h3 { font-size: 17px; margin: 24px 0 8px; }
+  p { margin: 0 0 12px; }
+  ul, ol { margin: 0 0 12px; padding-left: 22px; }
+  li { margin: 3px 0; }
+  .muted { color: var(--ink-3); }
+  .small { font-size: 14px; }
+  .tag { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 1px 6px; border-radius: 5px; background: #eef0f4; color: var(--ink-3); vertical-align: 1px; margin-right: 3px; }
+ 
+  .note { border: 1px dashed var(--sun); background: var(--sun-soft); border-radius: 10px; padding: 12px 16px; font-size: 14px; color: #5d4a17; margin-top: 24px; }
+ 
+  .summary { font-size: 17.5px; background: var(--card); border: 1px solid var(--rule); border-left: 4px solid var(--accent); border-radius: 10px; padding: 16px 18px; }
+  .team { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px; }
+  .member { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 10px 12px; font-size: 14px; color: var(--ink-3); }
+  .member b { display: block; color: var(--ink); }
+ 
+  figure { margin: 18px 0; background: var(--card); border: 1px solid var(--rule); border-radius: var(--r); padding: 16px; }
+  figure svg { width: 100%; height: auto; display: block; }
+  figcaption { font-size: 13.5px; color: var(--ink-3); margin-top: 8px; }
+  figcaption b { color: var(--ink-2); }
+ 
+  .callout { background: var(--accent-soft); border: 1px solid #f4c7b8; border-radius: 10px; padding: 12px 16px; margin: 14px 0; }
+  .callout b { color: #9c3416; }
+ 
+  .table-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: var(--r); background: var(--card); margin: 12px 0 16px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 13px; border-bottom: 1px solid var(--rule); }
+  thead th { background: #f4f2ed; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-2); }
+  tbody tr:last-child td { border-bottom: 0; }
+  td:first-child { font-weight: 600; }
+ 
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .box { background: var(--card); border: 1px solid var(--rule); border-radius: var(--r); padding: 14px 16px; }
+  .box h3 { margin: 0 0 8px; display: flex; align-items: center; gap: 8px; font-size: 16px; }
+  .box ul { list-style: none; padding: 0; margin: 0; }
+  .box li { position: relative; padding: 6px 0 6px 22px; border-bottom: 1px dashed var(--rule); font-size: 14.5px; color: var(--ink-2); }
+  .box li:last-child { border-bottom: 0; }
+  .box li b { color: var(--ink); }
+  .plan li::before { content: "-"; position: absolute; left: 0; color: var(--good); font-weight: 700; }
+  .hope li::before { content: "-"; position: absolute; left: 0; color: var(--sun); font-weight: 700; }
+  .plan { border-top: 4px solid var(--good); }
+  .hope { border-top: 4px solid var(--accent); }
+ 
+  .questions { counter-reset: q; list-style: none; padding: 0; }
+  .questions li { counter-increment: q; position: relative; padding: 8px 12px 8px 46px; margin: 0 0 8px; background: var(--card); border: 1px solid var(--rule); border-radius: 10px; font-size: 15px; }
+  .questions li::before { content: "Q" counter(q); position: absolute; left: 12px; top: 8px; font-family: var(--mono); font-weight: 700; color: var(--sky); font-size: 14px; }
+ 
+  .weeks { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; }
+  .week { background: var(--card); border: 1px solid var(--rule); border-radius: var(--r); padding: 14px 16px; }
+  .week header { all: unset; display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .week h3 { margin: 0; font-size: 16px; }
+  .week .dates { font-size: 13px; color: var(--ink-3); font-family: var(--mono); }
+  .week ul { padding-left: 18px; font-size: 14.5px; color: var(--ink-2); margin: 0; }
+  .week li b { color: var(--ink); }
+  .due { display: inline-block; margin-top: 8px; font-size: 12.5px; font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; padding: 2px 8px; }
+  .due.soft { background: #7b8394; }
+ 
+  .refs { font-size: 14px; color: var(--ink-2); }
+  .refs li { margin: 6px 0; }
+ 
+  footer { border-top: 1px solid var(--rule); padding: 20px 24px 36px; text-align: center; font-size: 13px; color: var(--ink-3); }
+ 
+  @media (max-width: 720px) {
+    .head { grid-template-columns: 1fr; } .head svg { display: none; }
+    .cols, .weeks { grid-template-columns: 1fr; }
+    .team { grid-template-columns: 1fr 1fr; }
+  }
+  @media print {
+    body { background: #fff; font-size: 10.5pt; }
+    .note { display: none; }
+    header { background: none; }
+    .head { padding: 8px 0; }
+    main { padding: 0; max-width: none; }
+    section { padding-top: 14px; }
+    figure, .box, .week, .table-wrap, .questions li { break-inside: avoid; }
+    a { color: inherit; border: 0; }
+  }
+ 
+  .linkrow { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; }
+  .btn { display: inline-block; font-size: 14px; font-weight: 600; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--rule); background: var(--card); color: var(--ink); }
+  .btn:hover { border-color: var(--sky); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  @media print { .linkrow .btn { border: 0; padding: 0 10px 0 0; background: none; color: var(--sky); } }
+</style>
+</head>
+<body>
+<header>
+  <div class="head">
+    <div>
+      <p class="eyebrow">CS 184/284A · Fall 2026 · Milestone Report</p>
+      <h1>Air Dancer</h1>
+      <p class="subtitle">Single-chamber air and cloth pressure integration</p>
+      <p class="linkrow">
+        <a class="btn primary" href="https://drive.google.com/file/d/1xmy4ShjMhurkJompprLWENefKOXz0lQT/view?usp=sharing">Video</a>
+        <a class="btn" href="https://docs.google.com/presentation/d/1hc2hSJb9zOhayYxxvPnFs114mCDdkmKf">Slides</a>
+        <a class="btn" href="https://jamesonhearn.github.io/cal-air-dancer/milestone.pdf">Paper (PDF)</a>
+        <a class="btn" href="https://jamesonhearn.github.io/cal-air-dancer/milestone.html">Webpage</a>
+        <a class="btn" href="https://jamesonhearn.github.io/cal-air-dancer/">Proposal</a>
+      </p>
+    </div>
+    <svg viewBox="0 0 120 160" aria-hidden="true">
+      <rect x="40" y="138" width="40" height="18" rx="4" fill="#2b3245"/>
+      <path d="M59 138 C49 112, 46 92, 54 74 C60 60, 72 56, 76 40 C80 28, 74 18, 66 14" fill="none" stroke="#e4572e" stroke-width="18" stroke-linecap="round"/>
+      <path d="M45 70 C42 52, 30 76, 18 66" fill="none" stroke="#f2b134" stroke-width="7" stroke-linecap="round"/>
+      <path d="M64 70 C78 74, 90 66, 100 54" fill="none" stroke="#f2b134" stroke-width="7" stroke-linecap="round"/>
+      <circle cx="63" cy="17" r="2.2" fill="#1c2230"/><circle cx="70" cy="20" r="2.2" fill="#1c2230"/>
+    </svg>
+  </div>
+</header>
+ 
+<main>
+  <section id="summary">
+    <h2>Abstract and Team</h2>
+    <p class="summary">An air dancer is a fabric tube on a blower whose flailing comes from a feedback loop:
+      airflow deforms the tube wall, and the deformed wall changes the airflow [1]. We aim to reproduce that
+      motion by simulating the loop, coupling a reduced airflow model to the C-IPC cloth and contact solver [3]
+      rather than animating the result. At this milestone we have merged the first half of that coupling: a
+      single-chamber air model, tube volume computed from the cloth mesh, and pressure forces applied inside
+      C-IPC. Standalone tests confirm conservation, equilibria, and timestep convergence, and short coupled runs
+      complete inside C-IPC.</p>
+    <div class="team">
+      <div class="member"><b>Jameson Hearn</b>UC Berkeley</div>
+      <div class="member"><b>Arian Namazi</b>UC Berkeley</div>
+      <div class="member"><b>Gregoire Marie Emile Georges Serres</b>UC Berkeley</div>
+      <div class="member"><b>Weishu Zhang</b>UC Berkeley</div>
+    </div>
+  </section>
+ 
+  <section id="design">
+    <h2>1. Design and Validation</h2>
+    <p>Air dancers combine large cloth deformation, self-contact, internal pressure, and moving airflow. Our working
+      hypothesis, from the proposal [5], is that a kink narrows the airflow, pressure builds below it while the section
+      above deflates, and the rising pressure straightens the kink so the cycle repeats. Experiments on soft
+      air-conveying tubes have characterized related instabilities [1, 2].</p>
+    <figure>
+      <svg viewBox="0 0 820 190" role="img" aria-label="Hypothesized loop: tube kinks, flow is restricted, top loses support while pressure builds below, and the tube may reopen.">
+        <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#7b8394"/></marker></defs>
+        <g font-size="13.5" fill="#1c2230" text-anchor="middle">
+          <rect x="10" y="30" width="180" height="70" rx="10" fill="#fdeee8" stroke="#bd4817" stroke-width="2"/>
+          <text x="100" y="60" font-weight="700">Tube kinks</text><text x="100" y="79" font-weight="700">cross-section narrows</text>
+          <rect x="220" y="30" width="180" height="70" rx="10" fill="#fff" stroke="#7b8394"/>
+          <text x="310" y="60" font-weight="700">Resistance rises</text><text x="310" y="79" font-weight="700">flow is restricted</text>
+          <rect x="430" y="30" width="180" height="70" rx="10" fill="#fff" stroke="#7b8394"/>
+          <text x="520" y="60" font-weight="700">Top deflates</text><text x="520" y="79" font-weight="700">pressure builds below</text>
+          <rect x="640" y="30" width="170" height="70" rx="10" fill="#fff" stroke="#7b8394"/>
+          <text x="725" y="60" font-weight="700">Kink straightens</text><text x="725" y="79" font-weight="700">tube springs up</text>
+        </g>
+        <g stroke="#7b8394" stroke-width="1.5" fill="none">
+          <path d="M192 65 H216" marker-end="url(#a)"/><path d="M402 65 H426" marker-end="url(#a)"/><path d="M612 65 H636" marker-end="url(#a)"/>
+          <path d="M725 102 V140 H100 V104" marker-end="url(#a)" stroke="#bd4817" stroke-dasharray="5 4"/>
+        </g>
+        <text x="412" y="164" text-anchor="middle" font-size="12.5" fill="#bd4817" font-weight="600">repeats under a steady fan (the hypothesis we test)</text>
+      </svg>
+      <figcaption><b>Figure 1.</b> The collapse-and-recovery mechanism we aim to reproduce.</figcaption>
+    </figure>
+    <p>Rather than a full three-dimensional fluid solve, we are building a reduced air model in stages. The first stage,
+      presented here, treats the tube interior as one chamber at uniform pressure. This captures inflation and the
+      fan/outlet balance, and it is also the uniform-pressure control planned in the proposal. The next stage splits the
+      tube into a chain of air sections whose connecting flow depends on the local passage cross-section, so that a
+      kink restricts flow. It reuses the geometry and coupling path built for this milestone.</p>
+ 
+    <h3>Contribution and validation</h3>
+    <p>Our contribution is a reduced airflow model for a deforming fabric tube, evaluated by direct comparison with
+      physical references rather than by visual plausibility alone. We will build two configurations.</p>
+    <div class="cols">
+      <div class="box plan">
+        <h3><span class="tag">Small scale</span> Cros et al. 2012 sky dancer [1]</h3>
+        <ul>
+          <li><b>Apparatus:</b> centrifugal blower, 4 cm exit, airspeed up to 40 m/s</li>
+          <li><b>Tubes:</b> plastic membrane, 1.5–4.0 cm diameter, 0.35–1.0 m long, 0.1 mm thick, 0.083 kg/m², <i>E</i> = 4.5 MPa</li>
+          <li><b>Target:</b> measured airspeed at which oscillation begins (primary quantitative test)</li>
+        </ul>
+      </div>
+      <div class="box hope">
+        <h3><span class="tag">Full scale</span> Commercial air dancer [6]</h3>
+        <ul>
+          <li><b>Product:</b> 10 ft × 12 in nylon air dancer (3.048 m × 0.3048 m), manufacturer listing</li>
+          <li><b>Geometry:</b> open and quarter-area-outlet profiles already in the repository</li>
+          <li><b>Target:</b> plausible full-scale motion from the same model</li>
+        </ul>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tube diameter (0.95 m length)</th><th>Measured onset airspeed [1]</th></tr></thead>
+        <tbody>
+          <tr><td>1.5 cm</td><td>20.9 m/s</td></tr>
+          <tr><td>2.2 cm</td><td>27.7 m/s</td></tr>
+          <tr><td>2.9 cm</td><td>32.8 m/s</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted">Reproducing this onset trend is the primary quantitative test for the small-scale configuration.</p>
+  </section>
+ 
+  <section id="method">
+    <h2>2. Implemented Method</h2>
+    <p><b>Cloth backend.</b> A dancing tube folds, kinks, and presses against itself, and the air model depends on that
+      geometry staying valid: a self-intersecting mesh has no meaningful enclosed volume. The HW4 mass-spring simulator was
+      not designed for robust self-collision in tight folds, and building that capability ourselves did not fit the project
+      timeline. We therefore use C-IPC [3], which extends incremental potential contact to codimensional shells and rods. It
+      guarantees intersection-free trajectories, enforces a thickness offset so shell mid-surfaces never come closer than a
+      set distance, and provides strain limiting and frictional contact.</p>
+    <p><b>Air chamber.</b> The state is the gas mass <i>m</i>. Absolute pressure follows the isothermal ideal-gas law
+      <i>p = mRT/V</i>, and the fabric is loaded by gauge pressure <i>p<sub>g</sub> = p − p<sub>atm</sub></i>. The fan
+      delivers less flow as back-pressure rises and shuts off at <i>p</i><sub>fan,max</sub>. The outlet is modeled as an
+      orifice whose flow grows with √<i>p<sub>g</sub></i> and reverses when the chamber drops below atmospheric. Mass is
+      advanced with backward-Euler substeps. Fan and outlet parameters are currently synthetic: 800 Pa shutoff, 1.5 m³/s
+      free flow, and a 0.0707 m² outlet.</p>
+    <p><b>Geometry.</b> The tube is open at both ends, so to measure its volume we close each boundary ring with a temporary
+      fan of triangles and sum signed tetrahedra. These closing caps exist only for the volume calculation and receive no
+      force. Each fabric triangle receives <i>p<sub>g</sub>A</i><b>n</b>, split equally among its three vertices.</p>
+    <p><b>C-IPC adapter.</b> Each step, a Python adapter samples the cloth positions, computes volume and outlet area,
+      advances the chamber, and writes gravity plus pressure traction into C-IPC's nodal force vector. The loads are held
+      fixed through C-IPC's implicit solve, and the resulting geometry feeds the next air update (Figure 2).</p>
+    <figure>
+      <svg viewBox="0 0 820 170" role="img" aria-label="Staggered coupling: cloth geometry supplies volume and outlet area to the air chamber, which supplies pressure loads held fixed during the C-IPC step; updated geometry is sampled on the next step.">
+        <defs><marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#7b8394"/></marker></defs>
+        <g font-size="14" fill="#1c2230" text-anchor="middle">
+          <rect x="30" y="20" width="210" height="70" rx="10" fill="#fff" stroke="#7b8394"/>
+          <text x="135" y="50" font-weight="700">Cloth geometry</text><text x="135" y="70">volume · outlet area</text>
+          <rect x="305" y="20" width="210" height="70" rx="10" fill="#fdeee8" stroke="#bd4817" stroke-width="2"/>
+          <text x="410" y="50" font-weight="700">Air chamber</text><text x="410" y="70">mass · pressure</text>
+          <rect x="580" y="20" width="210" height="70" rx="10" fill="#fff" stroke="#7b8394"/>
+          <text x="685" y="50" font-weight="700">C-IPC step</text><text x="685" y="70">loads held fixed</text>
+        </g>
+        <g stroke="#7b8394" stroke-width="1.5" fill="none">
+          <path d="M242 55 H301" marker-end="url(#b)"/><path d="M517 55 H576" marker-end="url(#b)"/>
+          <path d="M685 92 V130 H135 V94" marker-end="url(#b)" stroke="#456a83" stroke-dasharray="5 4"/>
+        </g>
+        <text x="410" y="154" text-anchor="middle" font-size="12.5" fill="#456a83" font-weight="600">updated geometry sampled next step</text>
+      </svg>
+      <figcaption><b>Figure 2.</b> Staggered coupling between the air chamber and C-IPC.</figcaption>
+    </figure>
+  </section>
+ 
+  <section id="results">
+    <h2>3. Preliminary Results</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Air model test (synthetic parameters, prescribed volume) [4]</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>Steady gauge pressure, full outlet</td><td>387.216624 Pa</td></tr>
+          <tr><td>Steady gauge pressure, 10% outlet area</td><td>791.528551 Pa</td></tr>
+          <tr><td>Fixed-volume error, Δt halved twice</td><td>44.15 → 24.52 → 13.05 Pa</td></tr>
+          <tr><td>Oscillating-volume error, Δt halved twice</td><td>3.10 → 1.54 → 0.77 Pa</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><b>Air model.</b> Steady pressures agree with an independent analytic solution to within 10<sup>−6</sup> Pa, and the
+      restricted case sits just below the 800 Pa fan shutoff, as expected. Each timestep halving roughly halves the error
+      against a fine reference run, as expected for first-order integration. Sealed compression follows the isothermal
+      <i>pV</i> invariant, a fully blocked outlet drives pressure to shutoff and recovers when reopened, and a
+      sub-atmospheric chamber refills through the outlet.</p>
+    <p><b>Geometry and coupling.</b> On a meshed cylinder (<i>r</i> = 0.15 m, <i>h</i> = 5 m, 20 × 32 vertices) the computed
+      volume matches the exact prism volume and is unchanged by rigid motion. Summed vertex force magnitude relative to
+      <i>p<sub>g</sub></i> times lateral area is cos(π/32) = 0.995, the expected faceting factor, and vertex forces match a
+      finite-difference volume gradient. With stand-in mechanics, the adapter replaces rather than accumulates loads, leaves
+      the floor unloaded, and isolates failed steps. In C-IPC itself, prescribed-pressure and chamber runs each completed
+      eight native substeps (0.067 s) with a chamber mass residual of 4.2 × 10<sup>−14</sup> kg. For the full-scale
+      comparison, open and restricted 10 ft profiles (3.048 m × 0.3048 m, the restricted one with a quarter-area fabric
+      outlet) generate 1,200-vertex, 2,360-triangle tube meshes.</p>
+  </section>
+ 
+  <section id="plan">
+    <h2>4. Progress and Updated Plan</h2>
+    <p>The proposal planned a chain of air sections on the HW4 cloth simulator and targeted a stable inflated tube and a
+      first collapse by this milestone [5]. Two things changed. The cloth side moved to C-IPC for the reasons in Section 2,
+      and validation is now framed around the two physical references in Section 1. The air model merged so far is the
+      single chamber, which doubles as the planned uniform-pressure control. The coupling path is complete and tested, but
+      coupled runs cover only the first frames, so sustained inflation, shape-dependent flow, and collapse are behind the
+      Week 2 schedule.</p>
+    <div class="weeks">
+      <div class="week">
+        <header><h3>Week 3</h3><span class="dates">Nov 23–29</span></header>
+        <ul>
+          <li>Run the coupled system to a <b>stable inflated tube</b>, recording volume, pressure, motion, and mass budgets</li>
+          <li>Measure sensitivity to the cloth timestep</li>
+          <li>Implement the <b>chain of air sections</b> with flow set by passage cross-section</li>
+          <li>Build the <b>Cros et al. configuration</b></li>
+        </ul>
+      </div>
+      <div class="week">
+        <header><h3>Week 4</h3><span class="dates">Nov 30–Dec 6</span></header>
+        <ul>
+          <li>Attempt <b>repeated collapse and recovery</b> under a steady fan</li>
+          <li>Sweep airspeed for the small-scale tubes and <b>compare onset thresholds</b> with the measured values</li>
+          <li>Run the <b>10 ft profile</b> with manufacturer fan data</li>
+          <li>Compare both against the uniform-pressure and fixed-resistance controls, then produce the final paper, video, and webpage</li>
+        </ul>
+        <span class="due">Final deliverables</span>
+      </div>
+    </div>
+  </section>
+ 
+  <section id="refs">
+    <h2>References</h2>
+    <ol class="refs">
+      <li>A. Cros, J. A. Rodríguez Romero, F. Castillo Flores. 2012. Sky Dancer: A Complex Fluid-Structure Interaction. Springer. <a href="https://doi.org/10.1007/978-3-642-17958-7_2">doi:10.1007/978-3-642-17958-7_2</a></li>
+      <li>O. D. Donato Angulo, C. Eloy, A. Cros. 2022. Divergence instability in an air-conveying soft tube: Analysis of static zig-zag shapes. <i>Journal of Fluids and Structures</i> 115, 103765. <a href="https://doi.org/10.1016/j.jfluidstructs.2022.103765">doi:10.1016/j.jfluidstructs.2022.103765</a></li>
+      <li>M. Li, D. M. Kaufman, C. Jiang. 2021. Codimensional Incremental Potential Contact. <i>ACM Transactions on Graphics</i> 40, 4, Article 170. <a href="https://ipc-sim.github.io/C-IPC/">ipc-sim.github.io/C-IPC</a></li>
+      <li>Air-model documentation, PR #3, commit a767925. <a href="https://github.com/jamesonhearn/CS184Final/blob/a76792556be955f3e23ddf9f2758bbd43fdb03f9/air_model/README.md">github.com/jamesonhearn/CS184Final</a></li>
+      <li>J. Hearn, A. Namazi, G. Serres, W. Zhang. 2026. Air Dancer project proposal. <a href="https://jamesonhearn.github.io/cal-air-dancer/">jamesonhearn.github.io/cal-air-dancer</a></li>
+      <li>Kleen-Rite. 10 Foot Inflatable Nylon Silk Yellow Air Dancer with Fan Blower (product listing). <a href="https://kleen-ritecorp.com/p-40250-10-foot-inflatable-nylon-silk-yellow-air-dancer-with-fan-blower.aspx">kleen-ritecorp.com</a></li>
+    </ol>
+  </section>
+</main>
+ 
+<footer>Air Dancer · CS 184/284A Fall 2026 · UC Berkeley · <a href="https://jamesonhearn.github.io/cal-air-dancer/">Proposal</a></footer>
+ 
+</body>
+</html>
+ 
